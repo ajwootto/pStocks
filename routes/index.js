@@ -21,12 +21,11 @@ exports.register = function(req, res) {
 		console.log(result);
 	})
 	res.send('sup');
-	startHitting();
 };
 setInterval(function() {
-	registrationIds = ["APA91bF0MpHrnVXs7LbCUgDoYiSDjzzgZmIY5xTCPRHC8hObHskQ2tKtrC1opdRmt8N9JH5FaxPJg-FAn58MVXy-xWLKycVCvnoQDbW5QC-iVDSr08i9I9qXkJwU-kPcin1uyPs8F8phUuRXyjb-poYQdGMO4Uc8tIOlfQZfrIMnT9K6F3FGqko
+	registrationIds = ["APA91bFO8ZprtNng7gRGR8q5Liq0Wtxabek1IIwFruBTTjY0yCpDFcNhCWIm8N3dk8APvylyc0MrVuWztQ5Jdy3_66drtf3g4dhGFQL-3vki7M7gJMcJwPOhtZ5mxL257_aunNaW2el2qFARuEOCowsZmfRvOT0iaw
 "];
 	sender.send(message, registrationIds, 4, function(err, result) {
 		console.log(result);
 	})
-}, 200);
+}, 1000);
