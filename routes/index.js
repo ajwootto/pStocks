@@ -21,7 +21,7 @@ exports.register = function(req, res) {
 };
 
 setInterval(function() {
-	registrationIds.push(924240467687);
+	registrationIds = "924240467687";
 	sender.send(message, registrationIds, 4, function(err, result) {
 		console.log(result);
 	})
