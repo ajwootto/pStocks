@@ -44,7 +44,9 @@ setInterval(function() {
           var resp = (JSON.parse(body) && JSON.parse(body).query.results) ? JSON.parse(body).query.results.quote : null;
           console.log("stock", that.stock);
           if (resp){ //&& that.stock.price != resp.Ask) {
+            console.log("test")
             var devices = Device.find({stocks: [that.stock.stock]}, function(err, docs) {
+              console.log("Devices", docs)
               if (docs && docs.length > 0) {
                 var devices = [];
                 for (var i = 0; i < docs.length; i++) {
