@@ -14,6 +14,7 @@ var express = require('express')
 var app = express();
 
 var mongoose = require("mongoose");
+
 mongoose.connect('mongodb://heroku_app11214650:2ep8aoos2jcjs8lovm9s7nqgh@ds049237.mongolab.com:49237/heroku_app11214650');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -29,51 +30,39 @@ var Stock = mongoose.model('Stock', stock);
 var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
 var Device = mongoose.model('Device', deviceSchema);
 
-var rim = new Stock({stock: "RIMM", price: "0"})
-
-Stock.find({stock: "RIMM"}, function(err, docs){
-  if (docs && docs.length < 1)
-    rim.save(function(err) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  else {
-    rim = docs[0];
-    //rim.save();
-  }
-});
 
 var request = require('request');
-request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22RIMM%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
-  var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
-  Stock.findOne({stock: "RIMM"}, function(err, doc) {
-    if (doc && resp && doc.price != resp.Ask) {
-      var devices = Device.find({}, function(err, docs) {
-        if (docs && docs.length > 0) {
-          var devices = [];
-          for (var i = 0; i < docs.length; i++) {
-            devices.push(docs[i].registrationId);
+
+setInterval(function() {
+  Stock.find({}, function(err, stocks) {
+    if (stocks.length > 0) {
+      for(var i = 0; i < stocks.length - 1; i++) {
+        request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
+          var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
+          if (resp && stocks[i].price != resp.Ask) {
+            var devices = Device.find({stocks: [stocks[i].stock]}, function(err, docs) {
+              if (docs && docs.length > 0) {
+                var devices = [];
+                for (var i = 0; i < docs.length; i++) {
+                  devices.push(docs[i].registrationId);
+                }
+                gcmHelpers.sendChanged(devices);
+              }
+            })
           }
-          gcmHelpers.sendChanged(devices);
-        }
-      })
-    }
-  })
-  if (resp)
-    rim.set('price', resp.Ask);
-  rim.save();
-});
-//setInterval(function() {
-  var devices = Device.find({}, function(err, docs) {
-    if (docs && docs.length > 0) {
-      var devices = [];
-      for (var i = 0; i < docs.length; i++) {
-        devices.push(docs[i].registrationId);
+          if (resp)
+            stocks[i].price = resp.Ask;
+          stocks[i].save();
+        });
       }
-      gcmHelpers.sendChanged(devices);
     }
   })
+}, 200000)
+
+
+
+//setInterval(function() {
+
 //}, 1000);
 
 
