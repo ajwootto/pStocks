@@ -38,30 +38,25 @@ setInterval(function() {
       console.log(stocks.length)
       for(var i = 0; i < stocks.length; i++) {
         console.log('checking', stocks[i].stock)
-        this.stock = stocks[i]
-        var that = this;
         var resp = request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
           var resp = (JSON.parse(body) && JSON.parse(body).query.results) ? JSON.parse(body).query.results.quote : null;
-          console.log("stock", that.stock);
           if (resp){ //&& that.stock.price != resp.Ask) {
-            console.log("test")
-            var devices = Device.find({stocks: [that.stock.stock]}, function(err, docs) {
-              console.log("Devices", docs)
-              if (docs && docs.length > 0) {
-                var devices = [];
-                for (var i = 0; i < docs.length; i++) {
-                  devices.push(docs[i].registrationId);
+            Stock.findOne({stock: resp.symbol}, function(err, stock) {
+              var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
+                if (docs && docs.length > 0) {
+                  var devices = [];
+                  for (var i = 0; i < docs.length; i++) {
+                    devices.push(docs[i].registrationId);
+                  };
+                  gcmHelpers.sendChanged(devices);
                 };
-                gcmHelpers.sendChanged(devices);
-              };
+              });
+              stock.price = resp.Ask;
+              stock.percent = resp.ChangeinPercent;
+              stock.change = resp.Change;
+              stock.save();
             });
-          };
-          if (resp) {
-            that.stock.price = resp.Ask;
-            that.stock.percent = resp.ChangeinPercent;
-            that.stock.change = resp.Change;
           }
-          that.stock.save();
         });
       }
     }
