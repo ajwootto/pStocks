@@ -64,16 +64,18 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
     rim.set('price', resp.Ask);
   rim.save();
 });
-
-var devices = Device.find({}, function(err, docs) {
-  if (docs && docs.length > 0) {
-    var devices = [];
-    for (var i = 0; i < docs.length; i++) {
-      devices.push(docs[i].registrationId);
+setInterval(function() {
+  var devices = Device.find({}, function(err, docs) {
+    if (docs && docs.length > 0) {
+      var devices = [];
+      for (var i = 0; i < docs.length; i++) {
+        devices.push(docs[i].registrationId);
+      }
+      gcmHelpers.sendChanged(devices);
     }
-    gcmHelpers.sendChanged(devices);
-  }
-})
+  })
+}, 1000);
+
 
 //var devices = Device.find({}, function(err, docs) {
 //  if (docs && docs.length > 0) {
