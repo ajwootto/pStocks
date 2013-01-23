@@ -1,6 +1,6 @@
 var gcm = require('node-gcm');
 var message = new gcm.Message();
-message.addData('update', 'update');
+message.addData('message', 'update');
 var sender = new gcm.Sender('AIzaSyAS69XB59u8lPtxrpYWfuDjkSzvGz43xP8');
 var registrationIds = [];
 
@@ -12,7 +12,7 @@ exports.sendChanged = function(devices) {
 
 exports.sendId = function(id, sendId) {
 	var idMessage = new gcm.Message();
-	idMessage.addData('genId', id);
+	idMessage.addData('message', id);
 	sender.send(idMessage, sendId, 4, function(err, result) {
 		console.log(result);
 	});
