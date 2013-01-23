@@ -46,5 +46,7 @@ exports.update = function(req, res) {
 			stock.save();
 		};
 	});
-	gcmHelpers.sendChanged([req.body['genId']]);
+	deviceModel.findOne({'genId': req.body['genId']}, function(err, doc) {
+			gcmHelpers.sendChanged([doc.registrationId]);
+	});
 };

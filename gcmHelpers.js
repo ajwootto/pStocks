@@ -5,7 +5,6 @@ var sender = new gcm.Sender('AIzaSyAS69XB59u8lPtxrpYWfuDjkSzvGz43xP8');
 var registrationIds = [];
 
 exports.sendChanged = function(devices) {
-	
 	sender.send(message, devices, 4, function(err, result) {
 		console.log(result);
 	})

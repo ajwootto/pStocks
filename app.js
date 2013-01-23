@@ -59,7 +59,7 @@ setInterval(function() {
       }
     }
   })
-}, 200000)
+}, 10000)
 
 
 
