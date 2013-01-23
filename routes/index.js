@@ -46,7 +46,10 @@ exports.update = function(req, res) {
 			stock.save();
 		};
 	});
+	console.log("Updated", req.body['genId']);
 	deviceModel.findOne({'genId': req.body['genId']}, function(err, doc) {
+		if (doc) {
 			gcmHelpers.sendChanged([doc.registrationId]);
+		};
 	});
 };
