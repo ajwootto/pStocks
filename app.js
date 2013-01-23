@@ -38,6 +38,7 @@ setInterval(function() {
       for(var i = 0; i < stocks.length; i++) {
         console.log('checking', stocks[i].stock)
         request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
+          console.log(JSON.parse(body).query);
           var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
           if (resp && stocks[i].price != resp.Ask) {
             var devices = Device.find({stocks: [stocks[i].stock]}, function(err, docs) {
@@ -50,10 +51,11 @@ setInterval(function() {
               };
             });
           };
-          if (resp)
+          if (resp) {
             stocks[i].price = resp.Ask;
             stocks[i].percent = resp.ChangeinPercent;
             stocks[i].change = resp.Change;
+          }
           stocks[i].save();
         });
       }

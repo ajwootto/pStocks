@@ -20,7 +20,7 @@ exports.register = function(req, res) {
 		gcmHelpers.sendId(req.body['genId'], [req.body['regId']]);
 	} else {
 		var newId = randomstring.generate();
-		var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: ['RIMM']});
+		var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: []});
 		newDevice.save();
 		gcmHelpers.sendId(newId, [req.body['regId']]);
 	}
