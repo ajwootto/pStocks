@@ -64,7 +64,7 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
     rim.set('price', resp.Ask);
   rim.save();
 });
-setInterval(function() {
+//setInterval(function() {
   var devices = Device.find({}, function(err, docs) {
     if (docs && docs.length > 0) {
       var devices = [];
@@ -74,7 +74,7 @@ setInterval(function() {
       gcmHelpers.sendChanged(devices);
     }
   })
-}, 1000);
+//}, 1000);
 
 
 //var devices = Device.find({}, function(err, docs) {
@@ -106,6 +106,7 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.post('/update', routes.update);
 app.post('/register', routes.register);
 
 
