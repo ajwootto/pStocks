@@ -32,7 +32,6 @@ var Device = mongoose.model('Device', deviceSchema);
 var rim = new Stock({stock: "RIMM", price: "0"})
 
 Stock.find({stock: "RIMM"}, function(err, docs){
-  console.log(docs[0])
   if (docs && docs.length < 1)
     rim.save(function(err) {
       if (err) {
@@ -49,7 +48,7 @@ var request = require('request');
 request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22RIMM%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
   var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
   Stock.findOne({stock: "RIMM"}, function(err, doc) {
-    if (doc && doc.price != resp.Ask) {
+    if (doc && resp && doc.price != resp.Ask) {
       var devices = Device.find({}, function(err, docs) {
         if (docs && docs.length > 0) {
           var devices = [];

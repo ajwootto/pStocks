@@ -14,7 +14,6 @@ exports.register = function(req, res) {
 	//var devices = mongoose.model('device');
 	//devices.set('devices', devices.get('devices').push({deviceId: randomstring.generate(), registrationId: res.body['regId'], stocks: "RIMM"}));
 	//devices.save();
-	console.log(req)
 	var newId = randomstring.generate();
 	var deviceModel = mongoose.model('Device');
 	//if (typeof res.body != 'undefined' && res.body){
