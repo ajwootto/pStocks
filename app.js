@@ -24,19 +24,19 @@ db.once('open', function callback() {
 
 
 
-var stock = new mongoose.Schema({stock: 'string', price: "string", percent: "string", change: "string"});
-var Stock = mongoose.model('Stock', stock);
+var stockSchema = new mongoose.Schema({stock: 'string', price: "string", percent: "string", change: "string"});
+var Stock = mongoose.model('Stock', stockSchema);
 
 var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
 var Device = mongoose.model('Device', deviceSchema);
 
 
-var request = require('request');
 
 setInterval(function() {
   Stock.find({}, function(err, stocks) {
     if (stocks.length > 0) {
-      for(var i = 0; i < stocks.length - 1; i++) {
+      for(var i = 0; i < stocks.length; i++) {
+        console.log('checking', stocks[i].stock)
         request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
           var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
           if (resp && stocks[i].price != resp.Ask) {
@@ -45,13 +45,15 @@ setInterval(function() {
                 var devices = [];
                 for (var i = 0; i < docs.length; i++) {
                   devices.push(docs[i].registrationId);
-                }
+                };
                 gcmHelpers.sendChanged(devices);
-              }
-            })
-          }
+              };
+            });
+          };
           if (resp)
             stocks[i].price = resp.Ask;
+            stocks[i].percent = resp.ChangeinPercent;
+            stocks[i].change = resp.Change;
           stocks[i].save();
         });
       }
@@ -88,7 +90,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
-var device = mongoose.Schema({device_id: "string"});
+
 app.configure('development', function(){
   app.use(express.errorHandler());
 });

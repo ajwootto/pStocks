@@ -1,6 +1,6 @@
 var gcm = require('node-gcm');
 var message = new gcm.Message();
-message.addData('update', 'true');
+message.addData('update', 'update');
 var sender = new gcm.Sender('AIzaSyAS69XB59u8lPtxrpYWfuDjkSzvGz43xP8');
 var registrationIds = [];
 

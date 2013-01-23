@@ -14,12 +14,17 @@ exports.register = function(req, res) {
 	//var devices = mongoose.model('device');
 	//devices.set('devices', devices.get('devices').push({deviceId: randomstring.generate(), registrationId: res.body['regId'], stocks: "RIMM"}));
 	//devices.save();
-	var newId = randomstring.generate();
-	//if (typeof res.body != 'undefined' && res.body){
 	var deviceModel = mongoose.model('Device');
-	var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: ['RIMM']});
-	newDevice.save();
-	gcmHelpers.sendId(newId, [req.body['regId']]);
+	if (req.body['genId'] != "") {
+		deviceModel.update({deviceId: req.body['genId']}, {registrationId: req.body['regId']});
+		gcmHelpers.sendId(req.body['genId'], [req.body['regId']]);
+	} else {
+		var newId = randomstring.generate();
+		var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: ['RIMM']});
+		newDevice.save();
+		gcmHelpers.sendId(newId, [req.body['regId']]);
+	}
+	//if (typeof res.body != 'undefined' && res.body){
 	//}
 		
 	res.send('sup');
@@ -35,10 +40,11 @@ exports.update = function(req, res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
 	deviceModel.update({deviceId: req.body['genId']}, {stocks: [req.body['tickerName']]});
-	stockModel.find({}, function(err, stocks) {
+	stockModel.find({stock: req.body['tickerName']}, function(err, stocks) {
 		if (stocks.length < 1) {
-			var stock = new stockModel({stock: req.body['tickerName'], price: 0});
+			var stock = new stockModel({stock: req.body['tickerName'], price: "0"});
 			stock.save();
 		};
 	});
+	gcmHelpers.sendChanged([req.body['genId']]);
 };
