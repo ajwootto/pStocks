@@ -65,15 +65,16 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
   rim.save();
 });
 
-var devices = Device.find({}, function(err, docs) {
-  if (docs && docs.length > 0) {
-    var devices = [];
-    for (var i = 0; i < docs.length; i++) {
-      devices.push(docs[i].registrationId);
-    }
-    gcmHelpers.sendChanged(devices);
-  }
-});
+//var devices = Device.find({}, function(err, docs) {
+//  if (docs && docs.length > 0) {
+ //   var devices = [];
+  //  for (var i = 0; i < docs.length; i++) {
+ //     devices.push(docs[i].registrationId);
+  //  }
+    gcmHelpers.sendChanged(["APA91bFO8ZprtNng7gRGR8q5Liq0Wtxabek1IIwFruBTTjY0yCpDFcNhCWIm8N3dk8APvylyc0MrVuWztQ5Jdy3_66drtf3g4dhGFQL-3vki7M7gJMcJwPOhtZ5mxL257_aunNaW2el2qFARuEOCowsZmfRvOT0iaw"])
+//);
+ // }
+//});
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
