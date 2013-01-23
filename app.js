@@ -32,7 +32,7 @@ var Device = mongoose.model('Device', deviceSchema);
 var rim = new Stock({stock: "RIMM", price: "0"})
 
 Stock.find({stock: "RIMM"}, function(err, docs){
-  console.log(docs.length)
+  console.log(docs[0])
   if (docs && docs.length < 1)
     rim.save(function(err) {
       if (err) {

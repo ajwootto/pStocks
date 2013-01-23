@@ -14,10 +14,11 @@ exports.register = function(req, res) {
 	//var devices = mongoose.model('device');
 	//devices.set('devices', devices.get('devices').push({deviceId: randomstring.generate(), registrationId: res.body['regId'], stocks: "RIMM"}));
 	//devices.save();
+	console.log(req)
 	var newId = randomstring.generate();
 	var deviceModel = mongoose.model('Device');
 	//if (typeof res.body != 'undefined' && res.body){
-	var newDevice = new deviceModel({deviceId: newId, registrationId: res.body['regId'], stocks: 'RIMM'});
+	var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: 'RIMM'});
 	newDevice.save();
 	gcmHelpers.sendId(newId, req.body['regId']);
 	//}
