@@ -96,6 +96,7 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.post('/update', routes.update);
+app.post('/updateStock', routes.updateStock);
 app.post('/register', routes.register);
 
 
