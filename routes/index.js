@@ -16,9 +16,11 @@ exports.register = function(req, res) {
 	//devices.save();
 	var newId = randomstring.generate();
 	var deviceModel = mongoose.model('Device');
-	var newDevice = new deviceModel({deviceId: newId, registrationId: res.body['regId'], stocks: 'RIMM'});
-	newDevice.save();
-	gcmHelpers.sendId(newId, req.body['regId']);
-	
+	if (typeof res.body != 'undefined' && res.body){
+		var newDevice = new deviceModel({deviceId: newId, registrationId: res.body['regId'], stocks: 'RIMM'});
+		newDevice.save();
+		gcmHelpers.sendId(newId, req.body['regId']);
+	}
+		
 	res.send('sup');
 };

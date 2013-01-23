@@ -29,7 +29,7 @@ var Stock = mongoose.model('Stock', stock);
 var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
 var Device = mongoose.model('Device', deviceSchema);
 
-var rim = new Stock({stock: "RIMM", value: "0"})
+var rim = new Stock({stock: "RIMM", price: "0"})
 
 Stock.find({stock: "RIMM"}, function(err, docs){
   console.log(docs.length)
@@ -40,7 +40,7 @@ Stock.find({stock: "RIMM"}, function(err, docs){
       }
     });
   else {
-    rim = docs[0].stock;
+    rim = docs[0];
     rim.save();
   }
 });
@@ -49,7 +49,7 @@ var request = require('request');
 request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22RIMM%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
   var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
   Stock.findOne({stock: "RIMM"}, function(err, doc) {
-    if (doc && doc.price != response) {
+    if (doc && doc.price != resp.Ask) {
       var devices = Device.find({}, function(err, docs) {
         if (docs && docs.length > 0) {
           var devices = [];
@@ -62,7 +62,7 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
     }
   })
   if (resp)
-    rim.set('stock', resp.Ask);
+    rim.set('price', resp.Ask);
   rim.save();
 });
 
