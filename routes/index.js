@@ -2,13 +2,9 @@
 /*
  * GET home page.
  */
-var gcm = require('node-gcm')
-	, randomstring = require('randomstring');
-var message = new gcm.Message();
-message.addData('key1', 'vicisdick');
-var sender = new gcm.Sender('AIzaSyAS69XB59u8lPtxrpYWfuDjkSzvGz43xP8');
-var registrationIds = [];
-var mongoose = require('mongoose');
+var randomstring = require('randomstring')
+	,gcmHelpers = require('../gcmHelpers.js')
+	,mongoose = require('mongoose');
 
 exports.index = function(req, res){
   res.render('index', { title: 'Express' });
@@ -18,8 +14,7 @@ exports.register = function(req, res) {
 	//var devices = mongoose.model('device');
 	//devices.set('devices', devices.get('devices').push({deviceId: randomstring.generate(), registrationId: res.body['regId'], stocks: "RIMM"}));
 	//devices.save();
-	sender.send(message, req.body['regId'], 4, function(err, result) {
-		console.log(result);
-	})
+	var newID = randomstring.generate();
+	gcmHelpers.sendId(newId, req.body['regId']);
 	res.send('sup');
 };

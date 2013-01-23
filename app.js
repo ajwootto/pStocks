@@ -9,7 +9,8 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , mongoose = require('mongoose')
-  , request = require("request");
+  , request = require("request")
+  , gcmHelpers = require("./gcmHelpers.js");
 var app = express();
 
 var mongoose = require("mongoose");
@@ -22,33 +23,57 @@ db.once('open', function callback() {
 
 
 
-var stock = new mongoose.Schema({stock: 'string', value: "string"});
-var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
-
-mongoose.model('Device', deviceSchema);
+var stock = new mongoose.Schema({stock: 'string', price: "string", percent: "string", change: "string"});
 var Stock = mongoose.model('Stock', stock);
-var rim;
+
+var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
+var Device = mongoose.model('Device', deviceSchema);
+
+var rim = new Stock({stock: "RIMM", value: "0"})
+
 Stock.find({stock: "RIMM"}, function(err, docs){
-  console.log(docs)
-  if (docs.length < 1)
-    rim = new Stock({stock: "RIMM", value: "0"});
-  else 
+  console.log(docs.length)
+  if (docs && docs.length < 1)
+    rim.save(function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  else {
     rim = docs[0];
-  rim.save();
+    rim.save();
+  }
 });
 
 var request = require('request');
 request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22RIMM%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
-  var response = JSON.parse(body).query;
+  var resp = JSON.parse(body).query.results ? JSON.parse(body).query.results.quote : null;
   Stock.findOne({stock: "RIMM"}, function(err, doc) {
-    if (doc.value != response) {
-
+    if (doc && doc.price != response) {
+      var devices = Device.find({}, function(err, docs) {
+        if (docs && docs.length > 0) {
+          var devices = [];
+          for (var i = 0; i < docs.length; i++) {
+            devices.push(docs[i].registrationId);
+          }
+          gcmHelpers.sendChanged(devices);
+        }
+      })
     }
   })
   rim.set('stock', response);
   rim.save();
 });
 
+var devices = Device.find({}, function(err, docs) {
+  if (docs && docs.length > 0) {
+    var devices = [];
+    for (var i = 0; i < docs.length; i++) {
+      devices.push(docs[i].registrationId);
+    }
+    gcmHelpers.sendChanged(devices);
+  }
+});
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
