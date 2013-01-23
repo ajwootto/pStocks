@@ -40,7 +40,7 @@ Stock.find({stock: "RIMM"}, function(err, docs){
       }
     });
   else {
-    rim = docs[0];
+    rim = docs[0].stock;
     rim.save();
   }
 });
@@ -61,7 +61,8 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
       })
     }
   })
-  rim.set('stock', response);
+  if (resp)
+    rim.set('stock', resp.Ask);
   rim.save();
 });
 
@@ -71,7 +72,7 @@ request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.fi
   //  for (var i = 0; i < docs.length; i++) {
  //     devices.push(docs[i].registrationId);
   //  }
-    gcmHelpers.sendChanged(["APA91bFO8ZprtNng7gRGR8q5Liq0Wtxabek1IIwFruBTTjY0yCpDFcNhCWIm8N3dk8APvylyc0MrVuWztQ5Jdy3_66drtf3g4dhGFQL-3vki7M7gJMcJwPOhtZ5mxL257_aunNaW2el2qFARuEOCowsZmfRvOT0iaw"])
+    //gcmHelpers.sendChanged(["APA91bFO8ZprtNng7gRGR8q5Liq0Wtxabek1IIwFruBTTjY0yCpDFcNhCWIm8N3dk8APvylyc0MrVuWztQ5Jdy3_66drtf3g4dhGFQL-3vki7M7gJMcJwPOhtZ5mxL257_aunNaW2el2qFARuEOCowsZmfRvOT0iaw"])
 //);
  // }
 //});
