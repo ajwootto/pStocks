@@ -13,7 +13,7 @@ exports.sendChanged = function(devices) {
 
 exports.sendId = function(id, sendId) {
 	var idMessage = new gcm.Message();
-	idMessage.addData('id', id);
+	idMessage.addData('genId', id);
 	sender.send(idMessage, sendId, 4, function(err, result) {
 		console.log(result);
 	});
