@@ -16,5 +16,8 @@ exports.register = function(req, res) {
 	//devices.save();
 	var newID = randomstring.generate();
 	gcmHelpers.sendId(newId, req.body['regId']);
+	var deviceModel = mongoose.model('Device');
+	var newDevice = new deviceModel({deviceId: newId, registrationId: res.body['regId'], stocks: 'RIMM'});
+	newDevice.save();
 	res.send('sup');
 };
