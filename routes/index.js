@@ -20,7 +20,7 @@ exports.register = function(req, res) {
 		gcmHelpers.sendId(req.body['genId'], [req.body['regId']]);
 	} else {
 		var newId = randomstring.generate();
-		var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stocks: []});
+		var newDevice = new deviceModel({deviceId: newId, registrationId: req.body['regId'], stock: ""});
 		newDevice.save();
 		gcmHelpers.sendId(newId, [req.body['regId']]);
 	}
@@ -33,14 +33,18 @@ exports.updateStock = function(req,res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
 	var device = deviceModel.findOne({deviceId: req.body["genId"]});
-	stockModel.findOne({stock: device.stocks}, function(err, stock){
-		res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
+	stockModel.findOne({stock: device.stock}, function(err, stock){
+		if (stock) {
+			res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
+		} else {
+			res.send("no data");
+		}
 	});
 };
 exports.update = function(req, res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
-	deviceModel.update({deviceId: req.body['genId']}, {stocks: [req.body['tickerName']]});
+	deviceModel.update({deviceId: req.body['genId']}, {stock: req.body['tickerName']});
 	stockModel.find({stock: req.body['tickerName']}, function(err, stocks) {
 		if (stocks.length < 1 && req.body['tickerName'] != "") {
 			var stock = new stockModel({stock: req.body['tickerName'], price: "0"});

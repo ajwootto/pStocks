@@ -27,7 +27,7 @@ db.once('open', function callback() {
 var stockSchema = new mongoose.Schema({stock: 'string', price: "string", percent: "string", change: "string"});
 var Stock = mongoose.model('Stock', stockSchema);
 
-var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stocks: "array"});
+var deviceSchema = new mongoose.Schema({deviceId: "string", registrationId: "string", stock: "string"});
 var Device = mongoose.model('Device', deviceSchema);
 
 
@@ -48,7 +48,7 @@ setInterval(function() {
             console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
               //if (stock.price != resp.Ask) {
-                var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
+                var devices = Device.find({stocks: stock.stock}, function(err, docs) {
                   console.log(docs)
                   if (docs && docs.length > 0) {
                     var devices = [];
