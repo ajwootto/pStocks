@@ -27,3 +27,6 @@ Then project > clean.
 You may have an issue where the gcm library got deleted (it should not have been). But if it was, you'll have to go download it.
 
 Also, your ADT needs to have Extras > Google Cloud Messaging.
+
+
+[An example of what the Pebble side would look like](http://i.imgur.com/EYl505w.jpg )     
