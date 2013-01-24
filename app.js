@@ -38,13 +38,15 @@ setInterval(function() {
       console.log(stocks.length)
       for(var i = 0; i < stocks.length; i++) {
         console.log('checking', stocks[i].stock)
-        var resp = request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
+        request("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22" + stocks[i].stock + "%22)%0A%09%09&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json", function(err, response, body){
+          console.log(body)
           if (body[0] != "<"){
             var resp = (JSON.parse(body).query && JSON.parse(body).query.results) ? JSON.parse(body).query.results.quote : null;
           } else {
             var resp = null;
           }
           if (resp){ //&& that.stock.price != resp.Ask) {
+            console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
               if (stock.price != resp.Ask) {
                 var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
@@ -67,8 +69,16 @@ setInterval(function() {
       }
     }
   })
-}, 60000)
-
+}, 6000)
+ var devices = Device.find({stocks: ["RIMM"]}, function(err, docs) {
+  if (docs && docs.length > 0) {
+    var devices = [];
+    for (var i = 0; i < docs.length; i++) {
+      devices.push(docs[i].registrationId);
+    };
+    gcmHelpers.sendChanged(devices);
+  };
+});
 
 
 //setInterval(function() {
