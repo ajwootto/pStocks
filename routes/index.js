@@ -33,6 +33,7 @@ exports.updateStock = function(req,res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
 	deviceModel.findOne({deviceId: req.body["genId"]}, function(err, device) {
+		console.log(device.stock)
 		stockModel.findOne({stock: device.stock}, function(err, stock){
 			if (stock) {
 				res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
