@@ -32,13 +32,14 @@ exports.register = function(req, res) {
 exports.updateStock = function(req,res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
-	var device = deviceModel.findOne({deviceId: req.body["genId"]});
-	stockModel.findOne({stock: device.stock}, function(err, stock){
-		if (stock) {
-			res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
-		} else {
-			res.send("no data");
-		}
+	deviceModel.findOne({deviceId: req.body["genId"]}, function(err, device) {
+		stockModel.findOne({stock: device.stock}, function(err, stock){
+			if (stock) {
+				res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
+			} else {
+				res.send("no data");
+			}
+		});
 	});
 };
 exports.update = function(req, res) {
