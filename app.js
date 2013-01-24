@@ -49,7 +49,7 @@ setInterval(function() {
           if (resp){ //&& that.stock.price != resp.Ask) {
             console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
-              //if (stock.price != resp.Ask) {
+              if (stock.price != resp.Ask) {
                 var devices = Device.find({stock: stock.stock}, function(err, docs) {
                   console.log(docs)
                   if (docs && docs.length > 0) {
@@ -64,7 +64,7 @@ setInterval(function() {
                 stock.percent = resp.ChangeinPercent;
                 stock.change = resp.Change;
                 stock.save();
-             //};
+             };
             });
           }
         });
