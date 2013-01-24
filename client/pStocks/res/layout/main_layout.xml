@@ -1,0 +1,157 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222"
+    
+    tools:context=".MainLayoutActivity" >
+
+    <Button
+        android:id="@+id/button_update"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="19dp"
+        android:layout_marginRight="16dp"
+        android:background="#ddd"
+        android:textColor="#222222"
+        android:text="Start" />
+
+    <EditText
+        android:id="@+id/main_editText_stockTicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button_update"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/button_update"
+        android:layout_toLeftOf="@+id/button_update"
+        android:ems="10"
+        android:hint="Ticker name"
+        android:textColor="#ddd" >
+
+        <requestFocus />
+    </EditText>
+<!-- //d42828 //8abf6a-->
+
+    <TextView
+        android:id="@+id/main_textview_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:text="@string/main_title"
+        android:textColor="#ddd"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/main_textview_tickername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/main_textview_title"
+        android:layout_marginLeft="16dp"
+        android:text="NONE"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/main_textview_percent_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/main_textview_day_change"
+        android:layout_below="@+id/main_textview_day_change"
+        android:layout_marginTop="47dp"
+        android:text="@string/percent_change"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+    <TextView
+        android:id="@+id/main_textview_day_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/main_textview_category_price"
+        android:layout_below="@+id/main_textview_category_price"
+        android:layout_marginTop="47dp"
+        android:text="@string/day_change"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+    <TextView
+        android:id="@+id/main_textview_category_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/main_textview_tickername"
+        android:layout_below="@+id/main_textview_tickername"
+        android:layout_marginTop="47dp"
+        android:text="@string/current_price"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/main_textview_day_change"
+        android:layout_alignRight="@+id/button_update"
+        android:layout_marginRight="24dp"
+        android:text="000.00"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+    <TextView
+        android:id="@+id/change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/main_textview_day_change"
+        android:layout_alignBottom="@+id/main_textview_day_change"
+        android:layout_alignLeft="@+id/price"
+        android:text="000.00"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+    <TextView
+        android:id="@+id/percent_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/main_textview_percent_change"
+        android:layout_alignBottom="@+id/main_textview_percent_change"
+        android:layout_alignLeft="@+id/change"
+        android:text="000.00"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ddd" />
+
+        <ImageView
+            android:id="@+id/splash"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@drawable/shortsplash" />
+
+        <ImageView
+            android:id="@+id/arrowdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_textview_category_price"
+            android:layout_alignRight="@+id/main_textview_percent_change"
+            android:layout_below="@+id/main_textview_title"
+            android:layout_toRightOf="@+id/main_textview_tickername"
+            android:src="@drawable/adown" />
+
+        <ImageView
+            android:id="@+id/arrowup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_textview_category_price"
+            android:layout_alignRight="@+id/main_textview_percent_change"
+            android:layout_below="@+id/main_textview_title"
+            android:layout_toRightOf="@+id/main_textview_tickername"
+            android:src="@drawable/aup" />
+
+</RelativeLayout>
