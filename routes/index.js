@@ -33,15 +33,16 @@ exports.updateStock = function(req,res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
 	var device = deviceModel.findOne({deviceId: req.body["genId"]});
-	var stock = stockModel.findOne({stock: device.stocks});
-	res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
+	stockModel.findOne({stock: device.stocks}, function(err, stock){
+		res.send(JSON.stringify({price: stock.price, percent: stock.percent, change: stock.change}));
+	});
 };
 exports.update = function(req, res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
 	deviceModel.update({deviceId: req.body['genId']}, {stocks: [req.body['tickerName']]});
 	stockModel.find({stock: req.body['tickerName']}, function(err, stocks) {
-		if (stocks.length < 1) {
+		if (stocks.length < 1 && req.body['tickerName'] != "") {
 			var stock = new stockModel({stock: req.body['tickerName'], price: "0"});
 			stock.save();
 		};

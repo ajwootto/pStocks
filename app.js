@@ -46,26 +46,28 @@ setInterval(function() {
           }
           if (resp){ //&& that.stock.price != resp.Ask) {
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
-              var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
-                if (docs && docs.length > 0) {
-                  var devices = [];
-                  for (var i = 0; i < docs.length; i++) {
-                    devices.push(docs[i].registrationId);
+              if (stock.price != resp.Ask) {
+                var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
+                  if (docs && docs.length > 0) {
+                    var devices = [];
+                    for (var i = 0; i < docs.length; i++) {
+                      devices.push(docs[i].registrationId);
+                    };
+                    gcmHelpers.sendChanged(devices);
                   };
-                  gcmHelpers.sendChanged(devices);
-                };
-              });
-              stock.price = resp.Ask;
-              stock.percent = resp.ChangeinPercent;
-              stock.change = resp.Change;
-              stock.save();
+                });
+                stock.price = resp.Ask;
+                stock.percent = resp.ChangeinPercent;
+                stock.change = resp.Change;
+                stock.save();
+              };
             });
           }
         });
       }
     }
   })
-}, 200000)
+}, 60000)
 
 
 
