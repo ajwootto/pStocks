@@ -30,3 +30,4 @@ Also, your ADT needs to have Extras > Google Cloud Messaging.
 
 
 [An example of what the Pebble side would look like](http://i.imgur.com/EYl505w.jpg )     
+[And another design](http://i.imgur.com/TCxEnIV.png)
