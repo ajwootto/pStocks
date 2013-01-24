@@ -59,4 +59,5 @@ exports.update = function(req, res) {
 			gcmHelpers.sendChanged([doc.registrationId]);
 		};
 	});
+	res.send('update success')
 };

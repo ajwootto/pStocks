@@ -44,6 +44,8 @@ setInterval(function() {
           } else {
             var resp = null;
           }
+          if (!resp)
+            console.log("Invalid stock or Yahoo API not responding (probably the latter)")
           if (resp){ //&& that.stock.price != resp.Ask) {
             console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
