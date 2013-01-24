@@ -50,7 +50,7 @@ setInterval(function() {
             console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
               //if (stock.price != resp.Ask) {
-                var devices = Device.find({stocks: stock.stock}, function(err, docs) {
+                var devices = Device.find({stock: stock.stock}, function(err, docs) {
                   console.log(docs)
                   if (docs && docs.length > 0) {
                     var devices = [];
