@@ -51,7 +51,7 @@ setInterval(function() {
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
               if (stock.price != resp.Ask) {
                 var devices = Device.find({stock: stock.stock}, function(err, docs) {
-                  console.log(docs)
+                  console.log("Old Price ", stock.price, " New Price ", resp.Ask)
                   if (docs && docs.length > 0) {
                     var devices = [];
                     for (var i = 0; i < docs.length; i++) {
