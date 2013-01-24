@@ -46,6 +46,7 @@ exports.updateStock = function(req,res) {
 exports.update = function(req, res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
+	console.log('genid:', req.body['genId'])
 	deviceModel.update({deviceId: req.body['genId']}, {stock: req.body['tickerName']});
 	stockModel.find({stock: req.body['tickerName']}, function(err, stocks) {
 		if (stocks.length < 1 && req.body['tickerName'] != "") {
