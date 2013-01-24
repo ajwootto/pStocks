@@ -48,7 +48,7 @@ setInterval(function() {
           if (resp){ //&& that.stock.price != resp.Ask) {
             console.log('successful check')
             Stock.findOne({stock: resp.symbol}, function(err, stock) {
-              if (stock.price != resp.Ask) {
+              //if (stock.price != resp.Ask) {
                 var devices = Device.find({stocks: [stock.stock]}, function(err, docs) {
                   if (docs && docs.length > 0) {
                     var devices = [];
@@ -62,23 +62,15 @@ setInterval(function() {
                 stock.percent = resp.ChangeinPercent;
                 stock.change = resp.Change;
                 stock.save();
-              };
+             //};
             });
           }
         });
       }
     }
   })
-}, 6000)
- var devices = Device.find({stocks: ["RIMM"]}, function(err, docs) {
-  if (docs && docs.length > 0) {
-    var devices = [];
-    for (var i = 0; i < docs.length; i++) {
-      devices.push(docs[i].registrationId);
-    };
-    gcmHelpers.sendChanged(devices);
-  };
-});
+}, 60000)
+
 
 
 //setInterval(function() {
