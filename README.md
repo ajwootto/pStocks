@@ -13,3 +13,13 @@ This is simply a prototype client, which takes the data sent to the phone by the
 
 Due to the Pebble SDK not being made publicly available, there is a simple "SendStocksToPebble" function that would, in theory, send the data string to the watch.
 
+####Loading in Eclipse####
+
+If you find yourself having troubles with: "[2013-01-24 01:52:00 - PebbleStockMain] Conversion to Dalvik format failed with error 1"
+
+Then go to Project properties > build path, click on Referenced Libraries, and then remove.
+Then project > clean.
+
+You may have an issue where the gcm library got deleted (it should not have been). But if it was, you'll have to go download it.
+
+Also, your ADT needs to have Extras > Google Cloud Messaging.
