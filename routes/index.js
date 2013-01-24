@@ -46,6 +46,7 @@ exports.updateStock = function(req,res) {
 exports.update = function(req, res) {
 	var deviceModel = mongoose.model('Device');
 	var stockModel = mongoose.model('Stock');
+	console.log(req.body['tickerName'])
 	deviceModel.update({deviceId: req.body['genId']}, {stock: req.body['tickerName']}, function(err, numAffected) {
 		console.log('updated' + numAffected);
 	});
